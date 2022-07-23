@@ -58,8 +58,10 @@ class _SettingsState extends State<Settings> {
                               child: DropdownButtonFormField<String>(
                                 focusColor: Colors.black,
                                 decoration: InputDecoration(
-                                    hoverColor: Colors.white,
-                                    focusColor: Colors.white,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 2),
+                                    ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(2),
                                       borderSide: BorderSide(

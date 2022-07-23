@@ -35,12 +35,12 @@ class _DashBoardState extends State<DashBoard> {
         controller: _fixedExtentScrollController,
         physics: FixedExtentScrollPhysics(),
         itemExtent: 250,
-        perspective: 0.010,
+        perspective: 0.001,
         childDelegate: ListWheelChildBuilderDelegate(
             builder: (context, int) {
               return buildCard(int);
             },
-            childCount: 10),
+            childCount: 25),
       ),
     );
   }
