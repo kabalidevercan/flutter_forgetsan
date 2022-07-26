@@ -135,15 +135,9 @@ class _AddProductState extends State<AddProduct> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        NotificationApi.showNotification(
-                          title: 'Ercan abs',
-                          body: 'SELAMUN ALEYKUM AHALE',
-                          payload: 'ercan.abs',
-                        );
-                      },
+                      onPressed: () {},
                       child: Text(
-                        "BAS",
+                        "Select Time",
                       ),
                     ),
                   ],
