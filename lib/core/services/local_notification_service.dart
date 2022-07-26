@@ -1,7 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest.dart' as tz;
 
 class NotificationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -34,6 +34,26 @@ class NotificationApi {
         onNotifications.add(payload);
       },
     );
+  }
+
+  static Future setScheduleNotification(
+      {int id = 0,
+      String? title,
+      String? body,
+      String? payload,
+      required String date}) async {
+    _notifications.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.parse(tz.local, date),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name',
+                channelDescription: 'your channel description')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
   }
 
   static Future showNotification({

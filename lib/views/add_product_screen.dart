@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_forgetsan/core/constants/colors.dart';
 import 'package:flutter_forgetsan/core/methods/const_of_text.dart';
+import 'package:flutter_forgetsan/core/models/things_model.dart';
 import 'package:flutter_forgetsan/core/services/local_notification_service.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
@@ -14,6 +16,7 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   late final TextEditingController _nameTextEditingController;
   late final TextEditingController _descriptionTextEditingController;
+  String date = DateTime.now().toString();
 
   @override
   void initState() {
@@ -135,12 +138,27 @@ class _AddProductState extends State<AddProduct> {
                       ),
                     ),
                     ElevatedButton(
+                        onPressed: () async {
+                          await DatePicker.showDateTimePicker(context,
+                              showTitleActions: true,
+                              minTime:
+                                  DateTime(DateTime.now().year, 1, 5, 20, 50),
+                              maxTime:
+                                  DateTime(DateTime.now().year, 12, 7, 05, 09),
+                              onChanged: (dates) {}, onConfirm: (dates) {
+                            setState(() {
+                              date = dates.toString();
+                            });
+                          }, locale: LocaleType.tr);
+                        },
+                        child: Text('TEST')),
+                    ElevatedButton(
                       onPressed: () {
-                        NotificationApi.showNotification(
-                          title: 'Ercan abs',
-                          body: 'SELAMUN ALEYKUM AHALE',
-                          payload: 'ercan.abs',
-                        );
+                        NotificationApi.setScheduleNotification(
+                            title: 'Ercan abs',
+                            body: 'SELAMUN ALEYKUM AHALE',
+                            payload: 'ercan.abs',
+                            date: date);
                       },
                       child: Text(
                         "BAS",
