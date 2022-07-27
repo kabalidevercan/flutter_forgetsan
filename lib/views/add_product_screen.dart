@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_forgetsan/core/constants/colors.dart';
 import 'package:flutter_forgetsan/core/methods/const_of_text.dart';
-import 'package:flutter_forgetsan/core/services/local_notification_service.dart';
+import 'package:flutter_forgetsan/core/models/things_model.dart';
+import 'package:flutter_forgetsan/core/services/ercan.dart';
+
 import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class AddProduct extends StatefulWidget {
@@ -14,11 +17,13 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
   late final TextEditingController _nameTextEditingController;
   late final TextEditingController _descriptionTextEditingController;
+  String date = DateTime.now().toString();
 
   @override
   void initState() {
     _nameTextEditingController = TextEditingController();
     _descriptionTextEditingController = TextEditingController();
+
     super.initState();
   }
 
@@ -134,10 +139,68 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Select Time",
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 20,
+                      width: MediaQuery.of(context).size.width / 1.3,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: theme1,
+                        ),
+                        onPressed: () async {
+                          await DatePicker.showDateTimePicker(context,
+                              theme: DatePickerTheme(
+                                backgroundColor: Colors.white,
+                                doneStyle: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                cancelStyle: TextStyle(
+                                  color: theme1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                itemStyle: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              showTitleActions: true,
+                              minTime:
+                                  DateTime(DateTime.now().year, 1, 5, 20, 50),
+                              maxTime:
+                                  DateTime(DateTime.now().year, 12, 7, 05, 09),
+                              onChanged: (dates) {}, onConfirm: (dates) {
+                            setState(() {
+                              date = dates.toString();
+                            });
+                          }, locale: LocaleType.tr);
+                        },
+                        child: Text(
+                          'Select Time',
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 10,
+                    ),
+                    IconButton(
+                      iconSize: 60,
+                      color: Colors.pink,
+                      onPressed: () {
+                        Ercan().liste.add(Things(
+                              title: _nameTextEditingController.value.text,
+                              description:
+                                  _descriptionTextEditingController.value.text,
+                              imgUrl:
+                                  'http://www.bilgiuzmani.com/resim/yuklenen/459733-sevimli-kopekler-2.jpg',
+                              dateTime: DateTime.parse(
+                                date,
+                              ),
+                            ));
+                      },
+                      icon: Icon(
+                        Icons.done,
                       ),
                     ),
                   ],

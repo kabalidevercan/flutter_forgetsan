@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_forgetsan/core/constants/colors.dart';
 import 'package:flutter_forgetsan/core/methods/const_of_text.dart';
 import 'package:flutter_forgetsan/core/methods/shape_of_border.dart';
+import 'package:flutter_forgetsan/core/models/things_model.dart';
+import 'package:flutter_forgetsan/core/services/ercan.dart';
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   late final FixedExtentScrollController _fixedExtentScrollController;
+  List<Things> listelerim = Ercan().liste;
   @override
   void initState() {
     _fixedExtentScrollController = FixedExtentScrollController();
@@ -37,16 +40,18 @@ class _DashBoardState extends State<DashBoard> {
         itemExtent: 250,
         perspective: 0.001,
         childDelegate: ListWheelChildBuilderDelegate(
-            builder: (context, int) {
-              return buildCard(int);
-            },
-            childCount: 25),
+          builder: (context, index) {
+            var liste = listelerim[index];
+            return buildCard(liste);
+          },
+          childCount: listelerim.length,
+        ),
       ),
     );
   }
 }
 
-Card buildCard(int sayi) {
+Card buildCard(Things liste) {
   return Card(
     shape: shapeforborder(60),
     color: theme1,
@@ -67,9 +72,10 @@ Card buildCard(int sayi) {
                   borderRadius: BorderRadius.circular(
                     60,
                   ),
-                  child: Image.asset(
-                    'assets/images/ütü.jpg',
-                    fit: BoxFit.fitWidth,
+                  child: Image.network(
+                    liste.imgUrl ??
+                        'http://www.bilgiuzmani.com/resim/yuklenen/157281-sevimli-kopekler-6.jpg',
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -81,7 +87,7 @@ Card buildCard(int sayi) {
             child: Card(
               color: Colors.black,
               child: Text(
-                "Krampon",
+                liste.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -96,7 +102,7 @@ Card buildCard(int sayi) {
               child: Card(
                 color: Colors.black,
                 child: Text(
-                  "Arka koltuklardan en sağdakinin altındaki kutunun içine koydum ",
+                  liste.description ?? "NULL",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,

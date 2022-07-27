@@ -1,15 +1,16 @@
 class Things {
+  String? id;
   String title;
   String? description;
   String? imgUrl;
-  int isLooked;
+  int isDone;
+  DateTime dateTime;
 
-  Things({
-    required this.title,
-    this.description,
-    this.imgUrl,
-    this.isLooked = 0,
-  });
-
-  
+  Things(
+      {this.id,
+      required this.title,
+      this.description,
+      this.imgUrl,
+      this.isDone = 0,
+      required this.dateTime});
 }
