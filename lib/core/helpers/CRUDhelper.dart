@@ -18,7 +18,7 @@ class CrudHelper {
         description: satir["description"] ?? "",
         imgUrl: satir["imgUrl"] ?? "",
         isDone: satir["isDone"],
-        dateTime: satir["dateTime"],
+        dateTime: DateTime.parse(satir["dateTime"]),
       );
     });
   }

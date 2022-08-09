@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_forgetsan/core/constants/colors.dart';
 import 'package:flutter_forgetsan/core/methods/const_of_text.dart';
 import 'package:flutter_forgetsan/core/methods/shape_of_border.dart';
 import 'package:flutter_forgetsan/core/models/things_model.dart';
-import 'package:flutter_forgetsan/core/services/ercan.dart';
+
+import '../core/helpers/CRUDhelper.dart';
 
 class DashBoard extends StatefulWidget {
   DashBoard({Key? key}) : super(key: key);
@@ -14,11 +17,19 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   late final FixedExtentScrollController _fixedExtentScrollController;
-  List<Things> listelerim = Ercan().liste;
+  List<Things>? listelerim;
+
+  Future initData() async {
+    listelerim = await CrudHelper().getAllThings();
+    setState(() {});
+  }
+
   @override
   void initState() {
     _fixedExtentScrollController = FixedExtentScrollController();
+
     super.initState();
+    initData();
   }
 
   @override
@@ -34,19 +45,21 @@ class _DashBoardState extends State<DashBoard> {
         centerTitle: true,
         title: textWidget("History"),
       ),
-      body: ListWheelScrollView.useDelegate(
-        controller: _fixedExtentScrollController,
-        physics: FixedExtentScrollPhysics(),
-        itemExtent: 250,
-        perspective: 0.001,
-        childDelegate: ListWheelChildBuilderDelegate(
-          builder: (context, index) {
-            var liste = listelerim[index];
-            return buildCard(liste);
-          },
-          childCount: listelerim.length,
-        ),
-      ),
+      body: listelerim != null
+          ? ListWheelScrollView.useDelegate(
+              controller: _fixedExtentScrollController,
+              physics: FixedExtentScrollPhysics(),
+              itemExtent: 250,
+              perspective: 0.001,
+              childDelegate: ListWheelChildBuilderDelegate(
+                builder: (context, index) {
+                  var liste = listelerim![index];
+                  return buildCard(liste);
+                },
+                childCount: listelerim!.length,
+              ),
+            )
+          : CircularProgressIndicator(),
     );
   }
 }
@@ -69,15 +82,17 @@ Card buildCard(Things liste) {
                 height: 110,
                 width: 120,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(
-                    60,
-                  ),
-                  child: Image.network(
-                    liste.imgUrl ??
-                        'http://www.bilgiuzmani.com/resim/yuklenen/157281-sevimli-kopekler-6.jpg',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    borderRadius: BorderRadius.circular(
+                      60,
+                    ),
+                    child: liste.imgUrl != null && liste.imgUrl!.length > 2
+                        ? Image.file(
+                            File(liste.imgUrl!),
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.contain,
+                          )
+                        : Container()),
               ),
             ],
           ),

@@ -45,12 +45,12 @@ dependencies:
   path: ^1.8.1
   sqflite: any
   rxdart: ^0.27.5
+  image_picker: ^0.8.4+4
+  image_picker_android: 0.8.4+13
 
   
 
 dev_dependencies:
-  flutter_test: 
-    sdk: flutter 
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
